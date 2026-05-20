@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Budget Tracker (50/30/20 Rule)</h1>
+        
+        <div class="card">
+            <h2>Total Income: <span th:text="${summary.totalIncome}"></span></h2>
+            <h3>Balance: <span th:text="${summary.balance}"></span></h3>
+        </div>
+
+        <!-- Safe warning display -->
+        <div th:if="${summary.warning}" 
+             style="background:#fee2e2; color:#b91c1c; padding:15px; border-radius:8px; margin:15px 0; border: 2px solid #ef4444;">
+            ⚠️ <span th:text="${summary.warning}"></span>
+        </div>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div class="card">
+                <h3>Needs (50%)</h3>
+                <p>Target: <span th:text="${summary.needsTarget}"></span></p>
+                <p>Spent: <span th:text="${summary.needsActual}"></span></p>
+            </div>
+            <div class="card">
+                <h3>Wants (30%)</h3>
+                <p>Target: <span th:text="${summary.wantsTarget}"></span></p>
+                <p>Spent: <span th:text="${summary.wantsActual}"></span></p>
+            </div>
+            <div class="card">
+                <h3>Savings (20%)</h3>
+                <p>Target: <span th:text="${summary.savingsTarget}"></span></p>
+                <p>Saved: <span th:text="${summary.savingsActual}"></span></p>
+            </div>
+        </div>
+
+        <a href="/add" class="btn">+ Add New Transaction</a>
+
+        <h2>Recent Transactions</h2>
+        <table border="1" style="width:100%; border-collapse: collapse;">
+            <tr style="background:#1f2937; color:white;">
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Actions</th>
+            </tr>
+            <tr th:each="t : ${transactions}">
+                <td th:text="${t.date}"></td>
+                <td th:text="${t.description}"></td>
+                <td th:text="${t.category}"></td>
+                <td th:text="${t.type}"></td>
+                <td th:text="${t.amount}"></td>
+                <td>
+                    <a th:href="@{/edit/{id}(id=${t.id})}">Edit</a>
+                    <a th:href="@{/delete/{id}(id=${t.id})}" onclick="return confirm('Delete this?')">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
